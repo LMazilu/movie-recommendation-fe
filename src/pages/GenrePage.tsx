@@ -1,16 +1,26 @@
 import React from "react";
-import GenreQuestion from "../components/GenreQuestion";
+import { useLocation, useNavigate } from "react-router-dom";
 import Container from "../styles/Container";
+import Button from "../styles/Button";
 
-interface GenrePageProps {
-  onSubmit: (genre: string) => void;
-}
+const GenrePage: React.FC = () => {
+  const location = useLocation();
+  const { moodAnswers, contentType } = location.state as {
+    moodAnswers: string[];
+    contentType: string;
+  };
+  const navigate = useNavigate();
 
-const GenrePage: React.FC<GenrePageProps> = ({ onSubmit }) => {
+  const handleGenre = (genre: string) => {
+    navigate("/recommendation", { state: { moodAnswers, contentType, genre } });
+  };
+
   return (
-    <Container>
-      <h2>Qual è il tuo genere preferito?</h2>
-      <GenreQuestion onSubmit={onSubmit} />
+    <Container className="genre-page">
+      <h1>Quale genere preferisci?</h1>
+      <Button onClick={() => handleGenre("azione")}>Azione</Button>
+      <Button onClick={() => handleGenre("commedia")}>Commedia</Button>
+      <Button onClick={() => handleGenre("drammatico")}>Drammatico</Button>
     </Container>
   );
 };

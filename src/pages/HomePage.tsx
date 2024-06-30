@@ -1,21 +1,18 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Container from "../styles/Container";
-import Button from "../styles/Button";
+import Button from "../components/base/Button";
 
-const HomePage: React.FC = () => {
+const Home: React.FC = () => {
   const navigate = useNavigate();
 
   return (
-    <Container>
-      <h2>Benvenuto!</h2>
-      <Button onClick={() => navigate("/login")}>Login</Button>
-      <Button onClick={() => navigate("/register")}>Registrazione</Button>
-      <Button onClick={() => navigate("/mood-questions")}>
-        Accedi senza iscrizione
-      </Button>
-    </Container>
+    <div className="home">
+      <h1>Benvenuto in Dumbie!</h1>
+      <Button onClick={() => navigate("/login")} label="Login" />
+      <Button onClick={() => navigate("/register")} label="Registrati" />
+      <Button onClick={() => navigate("/questions")} label="Accedi come Guest" />
+    </div>
   );
 };
 
-export default HomePage;
+export default Home;
