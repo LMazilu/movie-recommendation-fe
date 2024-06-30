@@ -27,16 +27,7 @@ const LoginPage: React.FC = () => {
 
   const handleGoogleLogin = async () => {
     signInWithPopup(auth, googleProvider)
-      .then(async (result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        //const credential = GoogleAuthProvider.credentialFromResult(result);
-        //const token = credential?.accessToken;
-        // The signed-in user info.
-        //const user = result.user;
-        //console.log(user);
-        //const token = user.idToken;
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
+      .then(async () => {
         const token = await auth.currentUser?.getIdToken(true);
         console.log(token);
         const response = await axios.post(
@@ -53,35 +44,10 @@ const LoginPage: React.FC = () => {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
-        // The email of the user's account used.
-        //const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
+        throw new Error(
+          "Error code: " + errorCode + "\n" + "Error Message: " + errorMessage
+        );
       });
-    /*
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      const token = auth.currentUser?.getIdToken(true);
-      console.log(token);
-      //const token = credential?.idToken;
-
-      // Send token to backend
-      const response = await axios.post(
-        "http://localhost:3030/auth/google-login",
-        {
-          token,
-        }
-      );
-      // Store the JWT access token received from the backend
-      console.log("TOKEN FATTO! : " + response.data);
-      localStorage.setItem("token", response.data.access_token);
-      navigate("/questions");
-    } catch (error) {
-      console.error("Errore durante il login: ", error);
-    }
-    */
   };
 
   return (
