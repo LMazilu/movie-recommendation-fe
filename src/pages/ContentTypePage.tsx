@@ -1,16 +1,22 @@
 import React from "react";
-import ContentTypeQuestion from "../components/ContentTypeQuestion";
+import { useLocation, useNavigate } from "react-router-dom";
 import Container from "../styles/Container";
+import Button from "../styles/Button";
 
-interface ContentTypePageProps {
-  onSubmit: (type: string) => void;
-}
+const ContentTypePage: React.FC = () => {
+  const location = useLocation();
+  const { moodAnswers } = location.state as { moodAnswers: string[] };
+  const navigate = useNavigate();
 
-const ContentTypePage: React.FC<ContentTypePageProps> = ({ onSubmit }) => {
+  const handleContentType = (contentType: string) => {
+    navigate("/genre", { state: { moodAnswers, contentType } });
+  };
+
   return (
-    <Container>
-      <h2>Che tipo di contenuto vuoi guardare?</h2>
-      <ContentTypeQuestion onSubmit={onSubmit} />
+    <Container className="content-type-page">
+      <h1>Che tipo di contenuto preferisci?</h1>
+      <Button onClick={() => handleContentType("film")}>Film</Button>
+      <Button onClick={() => handleContentType("serie")}>Serie</Button>
     </Container>
   );
 };
