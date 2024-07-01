@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Input from "../components/base/Input";
-import Button from "../components/base/Button";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../config/Firebase";
+import "./styles/HomePage.css";
+import { Header } from "../components/Header";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -41,34 +41,47 @@ const LoginPage: React.FC = () => {
         navigate("/questions");
       })
       .catch((error) => {
-        // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;
         throw new Error(
-          "Error code: " + errorCode + "\n" + "Error Message: " + errorMessage
+          "Error code: " + errorCode + "\nError Message: " + errorMessage
         );
       });
   };
 
   return (
-    <div className="login">
-      <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <Input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Button onClick={() => handleLogin} label="Login" />
-      </form>
-      <Button onClick={handleGoogleLogin} label="Login with Google" />
+    <div className="homepage-container">
+      <Header></Header>
+      <div className="login">
+        <h1>Login</h1>
+        <form className="login-form" onSubmit={handleLogin}>
+          <p className="subtitle">Perché iscriversi?</p>
+          <input
+            className="input-field"
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            className="input-field"
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button onClick={() => handleLogin}>ACCEDI</button>
+          <button onClick={handleGoogleLogin}>Accedi con Google</button>
+          <p className="forgot-password">Email o Password dimenticata?</p>
+        </form>
+        <button
+          type="button"
+          className="guest-button"
+          onClick={() => navigate("/questions")}
+        >
+          Accedi senza iscrizione
+        </button>
+      </div>
     </div>
   );
 };
