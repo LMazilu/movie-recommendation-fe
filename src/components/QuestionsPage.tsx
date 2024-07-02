@@ -27,9 +27,10 @@ const Questions = () => {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFinalLoading, setIsFinalLoading] = useState(false);
-  const [recommendationResponse, setRecommendationResponse] = useState<
-    Recommendation[] | null
-  >(null);
+  const [recommendationResponse, setRecommendationResponse] = useState<{
+    mood: string;
+    films: Recommendation[];
+  } | null>(null);
   const [selectedFilm, setSelectedFilm] = useState<Recommendation | null>(null);
 
   useEffect(() => {
@@ -102,7 +103,7 @@ const Questions = () => {
     });
   };
 
-  const handleFilmClick = (film: any) => {
+  const handleFilmClick = (film: Recommendation) => {
     setSelectedFilm(film);
   };
 
@@ -165,7 +166,11 @@ const Questions = () => {
     return (
       <div
         className="film-details-container"
-        style={{ backgroundImage: `url(${selectedFilm.url ?? (getImageUrl("default", "notfound.png"))})` }}
+        style={{
+          backgroundImage: `url(${
+            selectedFilm.url ?? getImageUrl("default", "notfound.png")
+          })`,
+        }}
       >
         <div className="film-details-overlay">
           <h2 className="film-title">{selectedFilm.title}</h2>
@@ -186,19 +191,24 @@ const Questions = () => {
       <div className="container">
         <h2 className="title">Dumbie</h2>
         <h2 className="question">
-          Sulla base delle tue risposte, pensiamo che ti piaceranno:
+          Sulla base delle tue risposte, sembra che tu sia{" "}
+          <span className="mood">{recommendationResponse.mood}</span>, ecco
+          alcuni film che fanno al caso tuo:
         </h2>
+
         <div className="options">
-          {recommendationResponse.map((film: any, index: number) => (
-            <div
-              className="option"
-              key={index}
-              onClick={() => handleFilmClick(film)}
-            >
-              <img src={film.url} alt={film.title} />
-              <span>{film.title}</span>
-            </div>
-          ))}
+          {recommendationResponse.films.map(
+            (film: Recommendation, index: number) => (
+              <div
+                className="option"
+                key={index}
+                onClick={() => handleFilmClick(film)}
+              >
+                <img src={film.url} alt={film.title} />
+                <span>{film.title}</span>
+              </div>
+            )
+          )}
         </div>
       </div>
     );

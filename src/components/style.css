@@ -22,11 +22,12 @@
 
 .mood {
     color: #ff8585;
-    /* Colore del mood */
+    text-transform: capitalize;
+    font-size: 2rem;
 }
 
 .question {
-    font-size: 3rem;
+    font-size: 2rem;
     color: #000;
     margin-bottom: 20px;
 }
