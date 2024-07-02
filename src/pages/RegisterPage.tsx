@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Input from "../components/base/Input";
-import Button from "../components/base/Button";
+import "../styles/styles.css";
 
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
@@ -23,23 +22,37 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="register">
-      <h1>Register</h1>
-      <form onSubmit={handleRegister}>
-        <Input
+    <div className="container">
+      <h2 className="title" onClick={() => navigate("/")}>
+        Dumbie
+      </h2>
+      <h2 className="question">Registrati a Dumbie!</h2>
+      <form className="login-form" onSubmit={handleRegister}>
+        <input
+          className="input-field"
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <Input
+        <input
+          className="input-field"
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button onClick={() => handleRegister} label="Register" />
+        <button className="login-button" onClick={() => handleRegister}>
+          Registrati
+        </button>
       </form>
+      <button
+        type="button"
+        className="guest-button"
+        onClick={() => navigate("/login")}
+      >
+        Hai già un account?
+      </button>
     </div>
   );
 };

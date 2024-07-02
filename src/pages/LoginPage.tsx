@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../config/Firebase";
-import "./styles/HomePage.css";
-import { Header } from "../components/Header";
+import "../styles/styles.css";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -29,14 +28,12 @@ const LoginPage: React.FC = () => {
     signInWithPopup(auth, googleProvider)
       .then(async () => {
         const token = await auth.currentUser?.getIdToken(true);
-        console.log(token);
         const response = await axios.post(
           "http://localhost:3030/auth/google-login",
           {
             token,
           }
         );
-        console.log("TOKEN FATTO! : " + response.data);
         localStorage.setItem("token", response.data.access_token);
         navigate("/questions");
       })
@@ -50,10 +47,12 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="homepage-container">
-      <Header></Header>
-      <div className="login">
-        <h1>Login</h1>
+    <div className="container">
+      <h2 className="title" onClick={() => navigate("/")}>
+        Dumbie
+      </h2>
+      <div className="subtitle">
+        <h1 className="question">Login</h1>
         <form className="login-form" onSubmit={handleLogin}>
           <p className="subtitle">Perché iscriversi?</p>
           <input
@@ -70,8 +69,12 @@ const LoginPage: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button onClick={() => handleLogin}>ACCEDI</button>
-          <button onClick={handleGoogleLogin}>Accedi con Google</button>
+          <button className="login-button" onClick={() => handleLogin}>
+            ACCEDI
+          </button>
+          <button className="google-button" onClick={handleGoogleLogin}>
+            Accedi con Google
+          </button>
           <p className="forgot-password">Email o Password dimenticata?</p>
         </form>
         <button

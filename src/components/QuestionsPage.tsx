@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/genericApi";
-import "./style.css";
+import "../styles/styles.css";
 import { getImageUrl } from "../config/Firebase";
 import Loader from "./loader";
 import { GeneratedFilmType } from "../types/GeneratedFilmType";
@@ -9,7 +9,7 @@ import { UserResponseType } from "../types/UserResponseType";
 import { Recommendation } from "../types/Recommendation";
 
 const Questions = () => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [recommendationLoaded, setRecommendationLoaded] =
     useState<boolean>(false);
@@ -196,7 +196,7 @@ const Questions = () => {
           <button className="back-button" onClick={handleBack}>
             Back
           </button>
-          <button className="watch-trailer-button" onClick={handleWatchTrailer}>
+          <button className="trailer-button" onClick={handleWatchTrailer}>
             Guarda trailer
           </button>
         </div>
@@ -207,9 +207,9 @@ const Questions = () => {
   if (recommendationResponse) {
     return (
       <div className="container">
-        <h2 className="title">Dumbie</h2>
+            <h2 className="title" onClick={() => navigate("/")}>Dumbie</h2>
         <h2 className="question">
-          Sulla base delle tue risposte, sembra che tu sia{" "}
+          Sulla base delle tue risposte, il tuo mood è{" "}
           <span className="mood">{recommendationResponse.mood}</span>, ecco
           alcuni film che fanno al caso tuo:
         </h2>
@@ -228,7 +228,7 @@ const Questions = () => {
             )
           )}
         </div>
-        <button className="restart-button" onClick={handleRestart}>
+        <button className="button" onClick={handleRestart}>
           Cambia mood
         </button>
       </div>
@@ -243,7 +243,9 @@ const Questions = () => {
         </div>
       ) : (
         <>
-          <h2 className="title">Dumbie</h2>
+          <h2 className="title" onClick={() => navigate("/")}>
+            Dumbie
+          </h2>
           {recommendationLoaded && (
             <>
               <h2 className="question">
@@ -276,7 +278,7 @@ const Questions = () => {
                   &lt;
                 </button>
               )}
-              <button className="restart-button" onClick={handleRestart}>
+              <button className="button" onClick={handleRestart}>
                 Cambia mood
               </button>
             </>

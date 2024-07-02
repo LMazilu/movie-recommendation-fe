@@ -4,8 +4,6 @@ import Home from "./pages/HomePage";
 import Login from "./pages/LoginPage";
 import Register from "./pages/RegisterPage";
 import Questions from "./components/QuestionsPage";
-import ThankYouPage from "./pages/ThankYouPage";
-import { FilmChoice } from "./pages/FilmChoice";
 
 const App: React.FC = () => {
   return (
@@ -14,10 +12,7 @@ const App: React.FC = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/thankyou" element={<ThankYouPage />} />
-
         <Route path="/questions" element={<Questions />} />
-        <Route path="/film-choice" element={<FilmChoice />} />
       </Routes>
     </Router>
   );
