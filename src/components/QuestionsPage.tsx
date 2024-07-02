@@ -7,9 +7,11 @@ import Loader from "./loader";
 import { GeneratedFilmType } from "../types/GeneratedFilmType";
 import { UserResponseType } from "../types/UserResponseType";
 import { Recommendation } from "../types/Recommendation";
+import { useAuth } from "../context/AuthContext";
 
 const Questions = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { isLoggedIn, user } = useAuth();
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [recommendationLoaded, setRecommendationLoaded] =
     useState<boolean>(false);
@@ -225,7 +227,11 @@ const Questions = () => {
                 onClick={() => handleFilmClick(film)}
               >
                 <img
-                  src={film.url === "" ? process.env.REACT_APP_URL_NOT_FOUND : film.url}
+                  src={
+                    film.url === ""
+                      ? process.env.REACT_APP_URL_NOT_FOUND
+                      : film.url
+                  }
                   alt={film.title}
                 />
                 <span>{film.title}</span>
@@ -251,6 +257,15 @@ const Questions = () => {
           <h2 className="title" onClick={() => navigate("/")}>
             Dumbie
           </h2>
+          {isLoggedIn ? (
+            <button className="user-button" onClick={() => navigate("/user")}>
+              Ciao {user?.email || "User"}
+            </button>
+          ) : (
+            <div className="user-button" onClick={() => navigate("/login")}>
+              Accedi
+            </div>
+          )}
           {recommendationLoaded && (
             <>
               <h2 className="question">
