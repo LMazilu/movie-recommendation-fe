@@ -1,10 +1,6 @@
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import naturaImg from "../assets/passions/natura.png";
-import generazioniImg from "../assets/passions/generazioni.png";
-import politicaImg from "../assets/passions/politica.png";
-import viaggioImg from "../assets/passions/viaggio.png";
-
+import { useLocation, useNavigate } from "react-router-dom";
+import { styled } from "styled-components";
+import api from "../api/genericApi";
 const Container = styled.div`
   background-color: #ffd600;
   color: #000;
@@ -80,9 +76,11 @@ const Footer = styled.footer`
   font-size: 18px;
 `;
 
-const Questions = () => {
+export const FilmChoice : React.FC = () => {
   const navigate = useNavigate();
-  //const { updateUserChoice } = useContext(UserContext);
+  const location = useLocation();
+  //const films = await api.post(`/recommedations/${location.state.topic}`);
+  //console.log(films);
 
   const handleOptionClick = (choice: string) => {
     //updateUserChoice({ passion: choice });
@@ -90,7 +88,7 @@ const Questions = () => {
     //   replace: true,
     //   state: { page: 2, topic: choice, next: "years" },
     // });
-    navigate("/years");
+    //navigate("/years");
   };
 
   return (
@@ -98,28 +96,26 @@ const Questions = () => {
       <Header>
         <h1>Dumbie</h1>
       </Header>
-      <Question>Cosa ti appassiona oggi?</Question>
+      <Question>Quale tra questi film ti piace di più?</Question>
       <Options>
         <Option onClick={() => handleOptionClick("Natura")}>
-          <img src={naturaImg} alt="Natura" />
+          <img src="www.a.com" alt="Natura" />
           <span>Natura</span>
         </Option>
         <Option onClick={() => handleOptionClick("Generazioni")}>
-          <img src={generazioniImg} alt="Generazioni" />
+          <img src="www.a.com" alt="Generazioni" />
           <span>Generazioni</span>
         </Option>
         <Option onClick={() => handleOptionClick("Politica")}>
-          <img src={politicaImg} alt="Politica" />
+          <img src="www.a.com" alt="Politica" />
           <span>Politica</span>
         </Option>
         <Option onClick={() => handleOptionClick("Viaggio")}>
-          <img src={viaggioImg} alt="Viaggio" />
+          <img src="www.a.com" alt="Viaggio" />
           <span>Viaggio</span>
         </Option>
       </Options>
-      <Footer>1/6</Footer>
+      <Footer>{location.state.page}/6</Footer>
     </Container>
   );
 };
-
-export default Questions;

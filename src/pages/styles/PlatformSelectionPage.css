@@ -1,0 +1,68 @@
+.platform-selection-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #ffdd44; /* Colore di sfondo giallo */
+  padding: 20px;
+}
+
+.title {
+  color: #ff8585; /* Colore del titolo */
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.mood-display {
+  font-size: 1rem;
+  color: #000;
+}
+
+.mood {
+  color: #ff8585; /* Colore del mood */
+}
+
+.question {
+  font-size: 1.5rem;
+  color: #000;
+  margin-bottom: 20px;
+}
+
+.platform-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.platform-button {
+  background-color: #ff6f61; /* Colore del pulsante */
+  color: #fff;
+  border: none;
+  padding: 20px;
+  font-size: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 150px;
+  height: 150px;
+}
+
+.change-mood-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #00cfff; /* Colore del pulsante */
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.emoji {
+  margin-left: 10px;
+  width: 20px;
+  height: 20px;
+}

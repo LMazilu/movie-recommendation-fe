@@ -4,16 +4,31 @@ import api from "../api/genericApi";
 import "./style.css";
 import { getImageUrl } from "../config/Firebase";
 import Loader from "./loader";
+import { GeneratedFilmType } from "../types/GeneratedFilmType";
+import { UserResponseType } from "../types/UserResponseType";
 
 const Questions = () => {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [recommendationLoaded, setRecommendationLoaded] =
     useState<boolean>(false);
-  const [films, setFilms] = useState<any>({});
-  const [userResponse, setUserResponse] = useState<any>({});
+  const [films, setFilms] = useState<GeneratedFilmType>({
+    title1: "",
+    title2: "",
+    title3: "",
+    title4: "",
+    url1: "",
+    url2: "",
+    url3: "",
+    url4: "",
+  });
+  const [userResponse, setUserResponse] = useState<UserResponseType>({});
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFinalLoading, setIsFinalLoading] = useState(false);
+  const [recommendationResponse, setRecommendationResponse] =
+    useState<any>(null);
+  const [selectedFilm, setSelectedFilm] = useState<any>(null);
 
   useEffect(() => {
     const getFilms = async () => {
@@ -41,7 +56,7 @@ const Questions = () => {
             allUrls.push(...movieUrls);
           } else {
             const urls = await Promise.all(
-              question.options.map(async (option) => {
+              question.options.map(async (option: string) => {
                 const url = await getImageUrl(
                   question.id,
                   option.toLowerCase() + ".png"
@@ -58,6 +73,40 @@ const Questions = () => {
     };
     fetchImageUrls();
   }, [recommendationLoaded, films]);
+
+  const handlePrevious = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion((prev) => prev - 1);
+    }
+  };
+
+  const handleAnswer = (answer: string) => {
+    setUserResponse((prev) => {
+      const updatedResponse = {
+        ...prev,
+        [questions[currentQuestion].id]: answer,
+      };
+
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion((prev) => prev + 1);
+      } else {
+        setIsFinalLoading(true);
+        api.post("/api/recommendations", updatedResponse).then((response) => {
+          setRecommendationResponse(response.data);
+          setIsFinalLoading(false);
+        });
+      }
+      return updatedResponse;
+    });
+  };
+
+  const handleFilmClick = (film: any) => {
+    setSelectedFilm(film);
+  };
+
+  const handleBack = () => {
+    setSelectedFilm(null);
+  };
 
   const questions = [
     {
@@ -102,21 +151,58 @@ const Questions = () => {
     },
   ];
 
-  const handleAnswer = async (answer: string) => {
-    if (currentQuestion < questions.length - 1) {
-      setUserResponse((prev: any) => ({
-        ...prev,
-        [questions[currentQuestion].id]: answer,
-      }));
-      setCurrentQuestion(currentQuestion + 1);
-    } else {
-      const response = (await api.post("/api/recommendations")).data;
-      navigate("/recommendation", {
-        replace: true,
-        state: { films: response },
-      });
-    }
-  };
+  if (isFinalLoading) {
+    return (
+      <div className="container">
+        <Loader />
+      </div>
+    );
+  }
+
+  if (selectedFilm) {
+    return (
+      <div
+        className="film-details-container"
+        style={{ backgroundImage: `url(${selectedFilm.url})` }}
+      >
+        <div className="film-details-overlay">
+          <h2 className="film-title">{selectedFilm.title}</h2>
+          <p className="film-description">Trama: {selectedFilm.description}</p>
+          <p className="film-cast">
+            Cast: {selectedFilm.cast}
+          </p>
+          <p className="film-duration">Durata: 2h 21 min</p>
+          <p className="film-year">Anno: 2021</p>
+          <button className="back-button" onClick={handleBack}>
+            Back
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (recommendationResponse) {
+    return (
+      <div className="container">
+        <h2 className="title">Dumbie</h2>
+        <h2 className="question">
+          Sulla base delle tue risposte, pensiamo che ti piaceranno:
+        </h2>
+        <div className="options">
+          {recommendationResponse.map((film: any, index: number) => (
+            <div
+              className="option"
+              key={index}
+              onClick={() => handleFilmClick(film)}
+            >
+              <img src={film.url} alt={film.title} />
+              <span>{film.title}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container">
@@ -133,25 +219,32 @@ const Questions = () => {
                 {questions[currentQuestion].question}
               </h2>
               <div className="options">
-                {questions[currentQuestion].options.map((option, index) => (
-                  <div
-                    className="option"
-                    key={option}
-                    onClick={() => handleAnswer(option)}
-                  >
-                    {imageUrls[index + currentQuestion * 4] && (
-                      <img
-                        src={imageUrls[index + currentQuestion * 4]}
-                        alt={option}
-                      />
-                    )}
-                    <span>{option}</span>
-                  </div>
-                ))}
+                {questions[currentQuestion].options.map(
+                  (option: string, index: number) => (
+                    <div
+                      className="option"
+                      key={option}
+                      onClick={() => handleAnswer(option)}
+                    >
+                      {imageUrls[index + currentQuestion * 4] && (
+                        <img
+                          src={imageUrls[index + currentQuestion * 4]}
+                          alt={option}
+                        />
+                      )}
+                      <span>{option}</span>
+                    </div>
+                  )
+                )}
               </div>
               <div className="footer">
                 Domanda {currentQuestion + 1}/{questions.length}
               </div>
+              {currentQuestion > 0 && (
+                <button className="previous-button" onClick={handlePrevious}>
+                  &lt;
+                </button>
+              )}
             </>
           )}
         </>
