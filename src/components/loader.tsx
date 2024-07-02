@@ -3,7 +3,11 @@ import "./loader.css";
 
 const Loader = () => {
   return (
-    <div className="loader">
+    <div className="loader-container">
+      <div className="loader-text">
+        Stiamo caricando le informazioni per migliorare la tua esperienza
+        <span className="loader-dots"></span>
+      </div>
       <div className="spinner"></div>
     </div>
   );
