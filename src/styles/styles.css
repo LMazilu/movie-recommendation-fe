@@ -11,16 +11,19 @@
     flex-direction: column;
     align-items: center;
     justify-content: top;
-    height: 100rem;
     background-color: #ffdd44;
     padding: 20px;
+    min-height: 100vh;
+    width: 100%;
 }
 
 .title {
     color: #ff8585;
     /* Colore del titolo */
-    font-size: 10rem;
+    font-size: 5rem;
     margin-bottom: 20px;
+    justify-content: flex-start;
+    cursor: pointer;
 }
 
 .subtitle {
@@ -198,8 +201,10 @@
 .footer {
     bottom: 10px;
     left: 10px;
-    font-size: 3rem;
+    font-size: 2rem;
     font-weight: bold;
+    color: #000;
+    position: absolute;
 }
 
 /* Film details styles */
@@ -212,6 +217,8 @@
     background-repeat: no-repeat;
     background-position: center center;
 }
+
+
 
 .film-details-overlay {
     position: absolute;
@@ -258,7 +265,7 @@
     font-size: 1.2em;
 }
 
-.trailer-button{
+.trailer-button {
     margin-top: 20px;
     padding: 15px 30px;
     background-color: #00cfff;

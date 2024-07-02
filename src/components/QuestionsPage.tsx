@@ -207,7 +207,9 @@ const Questions = () => {
   if (recommendationResponse) {
     return (
       <div className="container">
-            <h2 className="title" onClick={() => navigate("/")}>Dumbie</h2>
+        <h2 className="title" onClick={() => navigate("/")}>
+          Dumbie
+        </h2>
         <h2 className="question">
           Sulla base delle tue risposte, il tuo mood è{" "}
           <span className="mood">{recommendationResponse.mood}</span>, ecco
@@ -222,7 +224,10 @@ const Questions = () => {
                 key={index}
                 onClick={() => handleFilmClick(film)}
               >
-                <img src={film.url} alt={film.title} />
+                <img
+                  src={film.url === "" ? process.env.REACT_APP_URL_NOT_FOUND : film.url}
+                  alt={film.title}
+                />
                 <span>{film.title}</span>
               </div>
             )
