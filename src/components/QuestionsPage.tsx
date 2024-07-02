@@ -6,6 +6,7 @@ import { getImageUrl } from "../config/Firebase";
 import Loader from "./loader";
 import { GeneratedFilmType } from "../types/GeneratedFilmType";
 import { UserResponseType } from "../types/UserResponseType";
+import { Recommendation } from "../types/Recommendation";
 
 const Questions = () => {
   const navigate = useNavigate();
@@ -26,9 +27,10 @@ const Questions = () => {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFinalLoading, setIsFinalLoading] = useState(false);
-  const [recommendationResponse, setRecommendationResponse] =
-    useState<any>(null);
-  const [selectedFilm, setSelectedFilm] = useState<any>(null);
+  const [recommendationResponse, setRecommendationResponse] = useState<
+    Recommendation[] | null
+  >(null);
+  const [selectedFilm, setSelectedFilm] = useState<Recommendation | null>(null);
 
   useEffect(() => {
     const getFilms = async () => {
@@ -163,16 +165,14 @@ const Questions = () => {
     return (
       <div
         className="film-details-container"
-        style={{ backgroundImage: `url(${selectedFilm.url})` }}
+        style={{ backgroundImage: `url(${selectedFilm.url ?? (getImageUrl("default", "notfound.png"))})` }}
       >
         <div className="film-details-overlay">
           <h2 className="film-title">{selectedFilm.title}</h2>
           <p className="film-description">Trama: {selectedFilm.description}</p>
-          <p className="film-cast">
-            Cast: {selectedFilm.cast}
-          </p>
-          <p className="film-duration">Durata: 2h 21 min</p>
-          <p className="film-year">Anno: 2021</p>
+          <p className="film-cast">Cast: {selectedFilm.cast}</p>
+          <p className="film-duration">Durata: {selectedFilm.duration}</p>
+          <p className="film-year">Anno: {selectedFilm.year}</p>
           <button className="back-button" onClick={handleBack}>
             Back
           </button>

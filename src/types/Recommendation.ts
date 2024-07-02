@@ -4,4 +4,5 @@ export interface Recommendation {
   cast: string;
   duration: string;
   year: string;
+  url: string;
 }
