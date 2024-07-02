@@ -4,11 +4,14 @@ import axios from "axios";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../config/Firebase";
 import "../styles/styles.css";
+import { useAuth } from "../context/AuthContext";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [showPopup, setShowPopup] = useState(false);
+  const { login } = useAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,7 +20,7 @@ const LoginPage: React.FC = () => {
         email,
         password,
       });
-      localStorage.setItem("token", response.data.access_token);
+      login(response.data.access_token);
       navigate("/questions");
     } catch (error) {
       console.error("Errore durante il login: ", error);
@@ -34,7 +37,7 @@ const LoginPage: React.FC = () => {
             token,
           }
         );
-        localStorage.setItem("token", response.data.access_token);
+        login(response.data.access_token);
         navigate("/questions");
       })
       .catch((error) => {
@@ -54,7 +57,20 @@ const LoginPage: React.FC = () => {
       <div className="subtitle">
         <h1 className="question">Login</h1>
         <form className="login-form" onSubmit={handleLogin}>
-          <p className="subtitle">Perché iscriversi?</p>
+          <div className="popup-container">
+            <p
+              className="subtitle"
+              onMouseEnter={() => setShowPopup(true)}
+              onMouseLeave={() => setShowPopup(false)}
+            >
+              Perché iscriversi?
+            </p>
+            {showPopup && (
+              <div className="popup">
+                Se ti registri potrai visualizzare le raccomandazioni recenti!
+              </div>
+            )}
+          </div>
           <input
             className="input-field"
             type="email"
@@ -69,13 +85,18 @@ const LoginPage: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button className="login-button" onClick={() => handleLogin}>
+          <button className="login-button" type="submit">
             ACCEDI
           </button>
           <button className="google-button" onClick={handleGoogleLogin}>
             Accedi con Google
           </button>
-          <p className="forgot-password">Email o Password dimenticata?</p>
+          <p
+            className="forgot-password"
+            onClick={() => navigate("/forgot-password")}
+          >
+            Email o Password dimenticata?
+          </p>
         </form>
         <button
           type="button"
