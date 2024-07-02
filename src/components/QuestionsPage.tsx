@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/genericApi";
 import "./style.css";
@@ -111,6 +111,21 @@ const Questions = () => {
     setSelectedFilm(null);
   };
 
+  const handleRestart = () => {
+    setUserResponse({});
+    setSelectedFilm(null);
+    setCurrentQuestion(0);
+    setRecommendationResponse(null);
+  };
+
+  const handleWatchTrailer = () => {
+    const updatedStr = selectedFilm?.title.replace(" ", "+");
+    window.open(
+      "https://www.youtube.com/results?search_query=" + updatedStr + " trailer",
+      "_blank"
+    );
+  };
+
   const questions = [
     {
       id: "topic",
@@ -181,6 +196,9 @@ const Questions = () => {
           <button className="back-button" onClick={handleBack}>
             Back
           </button>
+          <button className="watch-trailer-button" onClick={handleWatchTrailer}>
+            Guarda trailer
+          </button>
         </div>
       </div>
     );
@@ -210,6 +228,9 @@ const Questions = () => {
             )
           )}
         </div>
+        <button className="restart-button" onClick={handleRestart}>
+          Cambia mood
+        </button>
       </div>
     );
   }
@@ -255,6 +276,9 @@ const Questions = () => {
                   &lt;
                 </button>
               )}
+              <button className="restart-button" onClick={handleRestart}>
+                Cambia mood
+              </button>
             </>
           )}
         </>
