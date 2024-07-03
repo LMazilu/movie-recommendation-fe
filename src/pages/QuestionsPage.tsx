@@ -3,15 +3,18 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/genericApi";
 import "../styles/styles.css";
 import { getImageUrl } from "../config/Firebase";
-import Loader from "./loader";
+import Loader from "../components/loader";
 import { GeneratedFilmType } from "../types/GeneratedFilmType";
 import { UserResponseType } from "../types/UserResponseType";
 import { Recommendation } from "../types/Recommendation";
 import { useAuth } from "../context/AuthContext";
+import { SelectedFilm } from "../components/SelectedFilm";
+import { RecommendationResponse } from "../components/RecommendationResponse";
+import { RecommendationResponseType } from "../types/RecommendationResponse";
+import { QuestionType } from "../types/QuestionType";
+import { Questions } from "../components/Questions";
 
-const Questions = () => {
-  const navigate = useNavigate();
-  const { isLoggedIn, user } = useAuth();
+const QuestionsPage = () => {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [recommendationLoaded, setRecommendationLoaded] =
     useState<boolean>(false);
@@ -29,10 +32,8 @@ const Questions = () => {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isFinalLoading, setIsFinalLoading] = useState(false);
-  const [recommendationResponse, setRecommendationResponse] = useState<{
-    mood: string;
-    films: Recommendation[];
-  } | null>(null);
+  const [recommendationResponse, setRecommendationResponse] =
+    useState<RecommendationResponseType | null>(null);
   const [selectedFilm, setSelectedFilm] = useState<Recommendation | null>(null);
 
   useEffect(() => {
@@ -120,15 +121,7 @@ const Questions = () => {
     setRecommendationResponse(null);
   };
 
-  const handleWatchTrailer = () => {
-    const updatedStr = selectedFilm?.title.replace(" ", "+");
-    window.open(
-      "https://www.youtube.com/results?search_query=" + updatedStr + " trailer",
-      "_blank"
-    );
-  };
-
-  const questions = [
+  const questions: QuestionType[] = [
     {
       id: "topic",
       question: "Cosa ti appassiona oggi?",
@@ -181,132 +174,36 @@ const Questions = () => {
 
   if (selectedFilm) {
     return (
-      <div
-        className="film-details-container"
-        style={{
-          backgroundImage: `url(${
-            selectedFilm.url ?? getImageUrl("default", "notfound.png")
-          })`,
-        }}
-      >
-        <div className="film-details-overlay">
-          <h2 className="film-title">{selectedFilm.title}</h2>
-          <p className="film-description">Trama: {selectedFilm.description}</p>
-          <p className="film-cast">Cast: {selectedFilm.cast}</p>
-          <p className="film-duration">Durata: {selectedFilm.duration}</p>
-          <p className="film-year">Anno: {selectedFilm.year}</p>
-          <button className="back-button" onClick={handleBack}>
-            Back
-          </button>
-          <button className="trailer-button" onClick={handleWatchTrailer}>
-            Guarda trailer
-          </button>
-        </div>
-      </div>
+      <SelectedFilm
+        selectedFilm={selectedFilm}
+        handleBack={handleBack}
+      ></SelectedFilm>
     );
   }
 
   if (recommendationResponse) {
     return (
-      <div className="container">
-        <h2 className="title" onClick={() => navigate("/")}>
-          Dumbie
-        </h2>
-        <h2 className="question">
-          Sulla base delle tue risposte, il tuo mood è{" "}
-          <span className="mood">{recommendationResponse.mood}</span>, ecco
-          alcuni film che fanno al caso tuo:
-        </h2>
-
-        <div className="options">
-          {recommendationResponse.films.map(
-            (film: Recommendation, index: number) => (
-              <div
-                className="option"
-                key={index}
-                onClick={() => handleFilmClick(film)}
-              >
-                <img
-                  src={
-                    film.url === ""
-                      ? process.env.REACT_APP_URL_NOT_FOUND
-                      : film.url
-                  }
-                  alt={film.title}
-                />
-                <span>{film.title}</span>
-              </div>
-            )
-          )}
-        </div>
-        <button className="button" onClick={handleRestart}>
-          Cambia mood
-        </button>
-      </div>
+      <RecommendationResponse
+        recommendationResponse={recommendationResponse}
+        handleFilmClick={handleFilmClick}
+        handleRestart={handleRestart}
+      ></RecommendationResponse>
     );
   }
 
   return (
-    <div className="container">
-      {isLoading ? (
-        <div className="loading-container">
-          <Loader />
-        </div>
-      ) : (
-        <>
-          <h2 className="title" onClick={() => navigate("/")}>
-            Dumbie
-          </h2>
-          {isLoggedIn ? (
-            <button className="user-button" onClick={() => navigate("/user")}>
-              Ciao {user?.email || "User"}
-            </button>
-          ) : (
-            <div className="user-button" onClick={() => navigate("/login")}>
-              Accedi
-            </div>
-          )}
-          {recommendationLoaded && (
-            <>
-              <h2 className="question">
-                {questions[currentQuestion].question}
-              </h2>
-              <div className="options">
-                {questions[currentQuestion].options.map(
-                  (option: string, index: number) => (
-                    <div
-                      className="option"
-                      key={option}
-                      onClick={() => handleAnswer(option)}
-                    >
-                      {imageUrls[index + currentQuestion * 4] && (
-                        <img
-                          src={imageUrls[index + currentQuestion * 4]}
-                          alt={option}
-                        />
-                      )}
-                      <span>{option}</span>
-                    </div>
-                  )
-                )}
-              </div>
-              <div className="footer">
-                Domanda {currentQuestion + 1}/{questions.length}
-              </div>
-              {currentQuestion > 0 && (
-                <button className="previous-button" onClick={handlePrevious}>
-                  &lt;
-                </button>
-              )}
-              <button className="button" onClick={handleRestart}>
-                Cambia mood
-              </button>
-            </>
-          )}
-        </>
-      )}
-    </div>
+    <Questions
+      isLoading={isLoading}
+      recommendationLoaded={recommendationLoaded}
+      questions={questions}
+      currentQuestion={currentQuestion}
+      setCurrentQuestion={setCurrentQuestion}
+      handleAnswer={handleAnswer}
+      imageUrls={imageUrls}
+      handlePrevious={handlePrevious}
+      handleRestart={handleRestart}
+    ></Questions>
   );
 };
 
-export default Questions;
+export default QuestionsPage;

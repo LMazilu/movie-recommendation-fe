@@ -57,14 +57,19 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const fetchRecommendations = async () => {
+  const fetchRecommendations = async (userEmail: string) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await api.get("http://localhost:3030/recommendations/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await api.get(
+        `http://localhost:3030/api/recommendations?user=${encodeURIComponent(
+          userEmail
+        )}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("Error fetching recommendations: ", error);

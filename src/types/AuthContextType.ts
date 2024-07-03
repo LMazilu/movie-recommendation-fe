@@ -6,5 +6,5 @@ export interface AuthContextType {
   login: (token: string) => void;
   logout: () => void;
   deleteUser: () => Promise<void>;
-  fetchRecommendations: () => Promise<Recommendation[]>;
+  fetchRecommendations: (userEmail: string) => Promise<Recommendation[]>;
 }

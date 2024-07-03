@@ -5,17 +5,29 @@ import "../styles/styles.css";
 import { Recommendation } from "../types/Recommendation";
 
 const UserPage: React.FC = () => {
+    
   const { user, deleteUser, fetchRecommendations } = useAuth();
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const loadRecommendations = async () => {
-      const fetchedRecommendations = await fetchRecommendations();
-      setRecommendations(fetchedRecommendations);
+      if (user && user.email) {
+        setIsLoading(true);
+        try {
+          const fetchedRecommendations = await fetchRecommendations(user.email);
+          setRecommendations(fetchedRecommendations);
+        } catch (error) {
+          console.error("Error loading recommendations:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
     };
+
     loadRecommendations();
-  }, [fetchRecommendations]);
+  }, [user, fetchRecommendations]);
 
   const handleLogout = () => {
     deleteUser();
@@ -23,7 +35,7 @@ const UserPage: React.FC = () => {
   };
 
   if (!user) {
-    return <div>Loading...</div>;
+    return <div>Sto caricando i dati...</div>;
   }
 
   return (
@@ -35,7 +47,6 @@ const UserPage: React.FC = () => {
       <div className="user-info">
         <p className="subtitle">Email: {user.email}</p>
         <p className="subtitle">Admin: {user.isAdmin ? "Yes" : "No"}</p>
-        <p className="subtitle">Deleted: {user.isDeleted ? "Yes" : "No"}</p>
         <button className="delete-button" onClick={handleLogout}>
           Cancella account
         </button>
@@ -44,18 +55,18 @@ const UserPage: React.FC = () => {
         </button>
       </div>
       <h2 className="question">Risultati recenti</h2>
-      {recommendations.length === 0 ? (
+      {isLoading ? (
+        <p className="subtitle">Caricamento risultati...</p>
+      ) : recommendations.length === 0 ? (
         <p className="subtitle">Nessun risultato recente trovato.</p>
       ) : (
-        <>
-          <ul className="recommendation-list">
-            {recommendations.map((rec, index) => (
-              <li key={index}>
-                {rec.title} - {rec.year}
-              </li>
-            ))}
-          </ul>
-        </>
+        <ul className="recommendation-list">
+          {recommendations.map((rec, index) => (
+            <li key={index}>
+              {rec.title} - {rec.year}
+            </li>
+          ))}
+        </ul>
       )}
     </div>
   );
