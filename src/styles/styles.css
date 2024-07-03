@@ -19,11 +19,17 @@
 
 .title {
     color: #ff8585;
-    /* Colore del titolo */
     font-size: 5rem;
     margin-bottom: 20px;
-    justify-content: flex-start;
+    text-align: left;
     cursor: pointer;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    margin-right: auto;
+}
+
+.title:hover {
+    transform: scale(1.05);
 }
 
 .subtitle {
@@ -210,70 +216,67 @@
 /* Film details styles */
 
 .film-details-container {
-    position: relative;
+    display: flex;
     width: 100%;
     height: 100vh;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
+    background-color: #ffdd44;
+    /* Using the background color from the original styles */
 }
 
+.film-cover {
+    flex: 1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
 
-
-.film-details-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 102, 102, 0.7);
+.film-details {
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    color: white;
-    text-align: center;
     padding: 40px;
+    background-color: rgba(0, 0, 0, 0.1);
+    /* Slight darkening */
 }
 
 .film-title {
     font-size: 2.5em;
     margin-bottom: 20px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    background: rgba(0, 0, 0, 0.5);
+    color: #000;
 }
 
 .film-description,
 .film-cast,
 .film-duration,
 .film-year {
-    font-size: 1.5em;
-    margin-bottom: 20px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    background: rgba(0, 0, 0, 0.5);
-    /* Added text shadow for better visibility */
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.button-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.back-button,
+.trailer-button {
+    padding: 15px 30px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
 }
 
 .back-button {
-    margin-top: 20px;
-    padding: 15px 30px;
     background-color: rgb(18, 225, 159);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.2em;
 }
 
 .trailer-button {
-    margin-top: 20px;
-    padding: 15px 30px;
     background-color: #00cfff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.2em;
 }
 
 /* User styles */
@@ -294,6 +297,8 @@
 }
 
 .user-info {
+    display: flex;
+    flex-direction: column;
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
@@ -306,15 +311,36 @@
     border: none;
     padding: 10px;
     cursor: pointer;
+    align-self: center;
+}
+
+.homepage-button {
+    max-width: 400px;
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #000;
+    cursor: pointer;
+    align-self: center;
 }
 
 .recommendation-list {
     list-style-type: none;
     padding: 0;
+    text-align: center;
 }
 
 .recommendation-list li {
-    padding: 5px 0;
+    padding: 10px 0;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.recommendation-list li:last-child {
+    border-bottom: none;
 }
 
 /* popup styles */

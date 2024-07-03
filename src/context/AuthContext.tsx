@@ -61,7 +61,7 @@ const AuthProvider: FC<AuthProviderProps> = ({ children }) => {
     try {
       const token = localStorage.getItem("token");
       const response = await api.get(
-        `http://localhost:3030/api/recommendations?user=${encodeURIComponent(
+        `http://localhost:3030/api/recommendations/${encodeURIComponent(
           userEmail
         )}`,
         {

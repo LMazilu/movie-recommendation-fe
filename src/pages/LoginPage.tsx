@@ -21,7 +21,7 @@ const LoginPage: React.FC = () => {
         password,
       });
       login(response.data.access_token);
-      navigate("/questions");
+      navigate("/");
     } catch (error) {
       console.error("Errore durante il login: ", error);
     }

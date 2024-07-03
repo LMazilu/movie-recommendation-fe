@@ -5,7 +5,6 @@ import "../styles/styles.css";
 import { Recommendation } from "../types/Recommendation";
 
 const UserPage: React.FC = () => {
-    
   const { user, deleteUser, fetchRecommendations } = useAuth();
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -45,12 +44,16 @@ const UserPage: React.FC = () => {
       </h2>
       <h2 className="question">Informazioni sull'utente</h2>
       <div className="user-info">
-        <p className="subtitle">Email: {user.email}</p>
-        <p className="subtitle">Admin: {user.isAdmin ? "Yes" : "No"}</p>
+        <p className="subtitle">
+          <b>Email:</b> {user.email}
+        </p>
+        <p className="subtitle">
+          <b>Admin:</b> {user.isAdmin ? "Yes" : "No"}
+        </p>
         <button className="delete-button" onClick={handleLogout}>
           Cancella account
         </button>
-        <button className="login-button" onClick={() => navigate("/")}>
+        <button className="homepage-button" onClick={() => navigate("/")}>
           Torna alla homepage{" "}
         </button>
       </div>
