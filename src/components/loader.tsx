@@ -1,6 +1,11 @@
-import React from "react";
-import "./loader.css";
+import "./Loader.css";
 
+
+/**
+ * Renders a loader component with a text message and a spinner.
+ *
+ * @return {JSX.Element} The loader component.
+ */
 const Loader = () => {
   return (
     <div className="loader-container">

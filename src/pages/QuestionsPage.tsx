@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import api from "../api/genericApi";
 import "../styles/styles.css";
-import { getImageUrl } from "../config/Firebase";
-import Loader from "../components/loader";
+import Loader from "../components/Loader";
 import { GeneratedFilmType } from "../types/GeneratedFilmType";
 import { UserResponseType } from "../types/UserResponseType";
 import { Recommendation } from "../types/Recommendation";
-import { useAuth } from "../context/AuthContext";
 import { SelectedFilm } from "../components/SelectedFilm";
 import { RecommendationResponse } from "../components/RecommendationResponse";
 import { RecommendationResponseType } from "../types/RecommendationResponse";
 import { QuestionType } from "../types/QuestionType";
 import { Questions } from "../components/Questions";
 
+/**
+ * Renders a page with a series of questions for generating movie recommendations.
+ *
+ * @return {JSX.Element} The rendered page with the questions and recommendations.
+ */
 const QuestionsPage = () => {
   const [currentQuestion, setCurrentQuestion] = useState<number>(0);
   const [recommendationLoaded, setRecommendationLoaded] =
@@ -36,6 +38,21 @@ const QuestionsPage = () => {
     useState<RecommendationResponseType | null>(null);
   const [selectedFilm, setSelectedFilm] = useState<Recommendation | null>(null);
 
+  /**
+   * A function that constructs a public image URL based on the provided folder and image name.
+   *
+   * @param {string} folder - The folder where the image is stored.
+   * @param {string} imageName - The name of the image file.
+   * @return {string} The constructed public image URL.
+   */
+  const getPublicImageUrl = (folder: string, imageName: string) => {
+    return process.env.REACT_APP_PUBLIC_BUCKET_URL + folder + "/" + imageName;
+  };
+
+  /**
+   * Get 4 random films asynchronously from the server and update the state with the response data.
+   *
+   */
   useEffect(() => {
     const getFilms = async () => {
       const response = await api.post("/api/recommendations/random");
@@ -47,32 +64,31 @@ const QuestionsPage = () => {
     }
   }, [recommendationLoaded]);
 
+  /**
+   * Fetches the image URLs for the questions.
+   *
+   * @return {Promise<void>} A promise that resolves when the image URLs are fetched.
+   */
   useEffect(() => {
     const fetchImageUrls = async () => {
       if (recommendationLoaded) {
-        const allUrls: string[] = [];
-        for (const question of questions) {
+        const urlPromises = questions.flatMap((question) => {
           if (question.id === "moviePreference") {
-            const movieUrls = await Promise.all(
-              [films.url1, films.url2, films.url3, films.url4].map(
-                async (url) =>
-                  url ?? (await getImageUrl("default", "notfound.png"))
-              )
+            return [films.url1, films.url2, films.url3, films.url4].map(
+              (url) => url || process.env.REACT_APP_URL_NOT_FOUND
             );
-            allUrls.push(...movieUrls);
           } else {
-            const urls = await Promise.all(
-              question.options.map(async (option: string) => {
-                const url = await getImageUrl(
-                  question.id,
-                  option.toLowerCase() + ".png"
-                );
-                return url ?? (await getImageUrl("default", "notfound.png"));
-              })
+            return question.options.map((option) =>
+              getPublicImageUrl(question.id, option.toLowerCase() + ".png")
             );
-            allUrls.push(...(urls as string[]));
           }
-        }
+        });
+
+        const resolvedUrls = await Promise.all(urlPromises);
+        const allUrls: string[] = resolvedUrls.filter(
+          (url): url is string => url !== null
+        );
+
         setImageUrls(allUrls);
         setIsLoading(false);
       }
@@ -86,6 +102,12 @@ const QuestionsPage = () => {
     }
   };
 
+  /**
+   * Updates the user response with the given answer and handles the logic for moving to the next question or making a recommendation.
+   *
+   * @param {string} answer - The answer provided by the user.
+   * @return {void} This function does not return anything.
+   */
   const handleAnswer = (answer: string) => {
     setUserResponse((prev) => {
       const updatedResponse = {
@@ -114,6 +136,11 @@ const QuestionsPage = () => {
     setSelectedFilm(null);
   };
 
+  /**
+   * Resets the state of the user response, selected film, current question, and recommendation response to their initial values.
+   *
+   * @return {void} This function does not return anything.
+   */
   const handleRestart = () => {
     setUserResponse({});
     setSelectedFilm(null);
@@ -121,6 +148,7 @@ const QuestionsPage = () => {
     setRecommendationResponse(null);
   };
 
+  /** Questions static array. */
   const questions: QuestionType[] = [
     {
       id: "topic",

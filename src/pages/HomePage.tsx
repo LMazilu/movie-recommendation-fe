@@ -3,6 +3,11 @@ import { useNavigate } from "react-router-dom";
 import "../styles/styles.css";
 import { useAuth } from "../context/AuthContext";
 
+/**
+ * Renders the Home page component.
+ *
+ * @return {ReactElement} The rendered Home page component.
+ */
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const { isLoggedIn, logout, user } = useAuth();

@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import api from "../api/genericApi";
 import { useNavigate, useParams } from "react-router-dom";
 
+/**
+ * ResetPasswordForm component for resetting user's password.
+ *
+ * @return {JSX.Element} The rendered component.
+ */
 const ResetPasswordForm = () => {
   const navigate = useNavigate();
   const { token } = useParams();
@@ -11,6 +16,12 @@ const ResetPasswordForm = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [message, setMessage] = useState("");
 
+  /**
+   * Handles the form submission for password reset.
+   *
+   * @param {React.FormEvent} e - The form event object.
+   * @return {Promise<void>} A promise that resolves when the password reset is complete.
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {

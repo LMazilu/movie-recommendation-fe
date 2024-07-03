@@ -4,12 +4,22 @@ import { useNavigate } from "react-router-dom";
 import "../styles/styles.css";
 import { Recommendation } from "../types/Recommendation";
 
+/**
+ * Renders the UserPage component, which displays information about the logged-in user and their recent recommendations.
+ *
+ * @return {JSX.Element} The rendered component.
+ */
 const UserPage: React.FC = () => {
   const { user, deleteUser, fetchRecommendations } = useAuth();
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
+  /**
+   * Loads the recommendations for the logged-in user.
+   *
+   * @return {Promise<void>} A promise that resolves when the recommendations are loaded.
+   */
   useEffect(() => {
     const loadRecommendations = async () => {
       if (user && user.email) {
@@ -64,7 +74,7 @@ const UserPage: React.FC = () => {
         <p className="subtitle">Nessun risultato recente trovato.</p>
       ) : (
         <ul className="recommendation-list">
-          {recommendations.map((rec, index) => (
+          {recommendations.reverse().map((rec, index) => (
             <li key={index}>
               {rec.title} - {rec.year}
             </li>

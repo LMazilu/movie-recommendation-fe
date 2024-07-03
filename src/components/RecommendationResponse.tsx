@@ -10,6 +10,15 @@ interface IProps {
   handleRestart: () => void;
 }
 
+/**
+ * Renders a component that displays a recommendation response based on user's answers.
+ *
+ * @param {IProps} props - An object containing the recommendation response, a function to handle film click, and a function to handle restart.
+ * @param {RecommendationResponseType} props.recommendationResponse - The recommendation response object.
+ * @param {(film: Recommendation) => void} props.handleFilmClick - A function to handle film click.
+ * @param {() => void} props.handleRestart - A function to handle restart.
+ * @return {JSX.Element} The rendered component.
+ */
 export const RecommendationResponse: React.FC<IProps> = ({
   recommendationResponse,
     handleFilmClick,
@@ -48,9 +57,7 @@ export const RecommendationResponse: React.FC<IProps> = ({
             >
               <img
                 src={
-                  film.url === ""
-                    ? process.env.REACT_APP_URL_NOT_FOUND
-                    : film.url
+                  film.url ||process.env.REACT_APP_URL_NOT_FOUND
                 }
                 alt={film.title}
               />

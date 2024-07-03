@@ -8,6 +8,16 @@ interface IProps {
   handleBack: () => void;
 }
 
+
+/**
+ * Renders a component that displays the details of a selected film.
+ * 
+ * @param {IProps} props - An object containing the selected film, and a function to handle going back to the recommendations.
+ * @param {Recommendation} selectedFilm - The selected film object.
+ * @param {() => void} handleBack - A function to handle going back to the recommendations.
+ * 
+ * @return {JSX.Element} The rendered component.
+ */
 export const SelectedFilm: React.FC<IProps> = ({
   selectedFilm,
   handleBack,

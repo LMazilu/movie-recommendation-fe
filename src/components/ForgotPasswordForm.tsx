@@ -2,6 +2,12 @@ import React, { useState } from "react";
 import api from "../api/genericApi";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * Handles the submission of the forgot password form.
+ *
+ * @param {React.FormEvent} e - The form event.
+ * @return {Promise<void>} A promise that resolves when the form submission is complete.
+ */
 const ForgotPasswordForm = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -21,7 +27,9 @@ const ForgotPasswordForm = () => {
 
   return (
     <div className="container">
-      <h2 className="title" onClick={() => navigate("/")}>Dumbie</h2>
+      <h2 className="title" onClick={() => navigate("/")}>
+        Dumbie
+      </h2>
       <h2 className="question">Password dimenticata?</h2>
       <form className="login-form" onSubmit={handleSubmit}>
         <input

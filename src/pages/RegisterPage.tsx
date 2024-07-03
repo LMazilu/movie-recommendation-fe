@@ -3,11 +3,22 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/styles.css";
 
+/**
+ * Renders a registration page where users can sign up with their email and password.
+ *
+ * @return {JSX.Element} The registration page component.
+ */
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  /**
+   * Handles the registration process.
+   *
+   * @param {React.FormEvent} e - The form event.
+   * @return {Promise<void>} A promise that resolves when the registration is complete.
+   */
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
