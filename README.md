@@ -12,11 +12,11 @@ There is no source code for the mongo, it's using nest mongoose + docker image t
 
 ## How to build + run the app locally
 
-1- Download both "movie-recommendation-fe" (this project) and "movie-recommendation" from my github repositories.
-2- Make a .env file for both of the projects. You can find a `.env.example` file inside the root directory of both projects. Use your personal data
-3- run `npm install` for both projects
-4- run the `npm run docker` script from the backend root directory. There is a docker compose file that will do everything for you.
-5- Done! you can now use the frontend at `localhost:3000` and the backend at `localhost:3030`. The Swagger Apis are available at `localhost:3030/api/docs`.
+1. Download both "movie-recommendation-fe" (this project) and "movie-recommendation" from my github repositories.
+2. Make a .env file for both of the projects. You can find a `.env.example` file inside the root directory of both projects. Use your personal data
+3. run `npm install` for both projects
+4. run the `npm run docker` script from the backend root directory. There is a docker compose file that will do everything for you.
+5. Done! you can now use the frontend at `localhost:3000` and the backend at `localhost:3030`. The Swagger Apis are available at `localhost:3030/api/docs`.
 
 ## How to build the app
 
